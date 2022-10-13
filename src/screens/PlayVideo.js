@@ -58,7 +58,7 @@ const PlayVideo = props => {
 
   const [showController, setshowController] = useState(true);
 
-  const [paused, setpaused] = useState(false);
+  const [paused, setpaused] = useState(true);
   const [muted, setmuted] = useState(false);
   const [volume, setvolume] = useState(1);
   const [CurrentTime, setCurrentTime] = useState(0);
@@ -99,13 +99,19 @@ const PlayVideo = props => {
   };
   useEffect(() => {
     if (IsFocused) {
-      Orientation.lockToLandscape();
-      setFullScreen(true);
+      // Orientation.lockToLandscape();
+      // setFullScreen(true);
     } else {
       Orientation.lockToPortrait();
       setFullScreen(false);
     }
   }, [IsFocused]);
+  useEffect(() => {
+    if (!paused) {
+      Orientation.lockToLandscape();
+      setFullScreen(true);
+    }
+  }, [paused]);
 
   const Controller = (
     <View
@@ -152,8 +158,20 @@ const PlayVideo = props => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
-          width: '50%',
+          width: '80%',
         }}>
+        <Icon
+          name="play-skip-back-outline"
+          type="ionicon"
+          size={40}
+          color={'#fff'}
+          onPress={() =>
+            videos.length > 0 && videoIndexNum > 0
+              ? setVideoIndexNum(videoIndexNum - 1)
+              : null
+          }
+          activeOpacity={1}
+        />
         <Icon
           name="play-back-outline"
           type="ionicon"
@@ -196,6 +214,18 @@ const PlayVideo = props => {
           size={40}
           color={'#fff'}
           onPress={() => setsakeValue(CurrentTime + 5)}
+          activeOpacity={1}
+        />
+        <Icon
+          name="play-skip-forward-outline"
+          type="ionicon"
+          size={40}
+          color={'#fff'}
+          onPress={() =>
+            videos.length > videoIndexNum + 1
+              ? setVideoIndexNum(videoIndexNum + 1)
+              : null
+          }
           activeOpacity={1}
         />
       </View>
@@ -253,14 +283,15 @@ const PlayVideo = props => {
             uri: videos[videoIndexNum].url,
           }}
           poster={videos[videoIndexNum].poster}
-          //   source={{
-          //     uri: props.route.params.selectedVideo.url,
-          //   }}
+          // source={{
+          //   uri: props.route.params.selectedVideo.url,
+          // }}
           //   poster={props.route.params.selectedVideo.poster}
           style={{
             height: '100%',
             width: '100%',
           }}
+          posterResizeMode="cover"
           resizeMode="contain"
           paused={paused}
           muted={muted}
@@ -268,7 +299,11 @@ const PlayVideo = props => {
           fullscreen={fullScreen}
           seek={sakeValue}
           //   onEnd={() => navigation.goBack()}
-          onEnd={() => setVideoIndexNum(videoIndexNum + 1)}
+          onEnd={() => {
+            videos.length > videoIndexNum + 1
+              ? setVideoIndexNum(videoIndexNum + 1)
+              : (Orientation.lockToPortrait(), setFullScreen(false));
+          }}
           onSeek={e => {
             setCurrentTime(e.currentTime);
           }}
