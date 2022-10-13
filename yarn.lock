@@ -1660,6 +1660,13 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/eslint-plugin/-/eslint-plugin-1.2.0.tgz"
   "version" "1.2.0"
 
+"@react-native-community/slider@^4.3.2":
+  "integrity" "sha512-pKIx+l3yFQAVMcqGsnRcJAqZbVeR69CRbW85nZHhLuR/mOT0NbKWJIAEy7MC+e84DMTw0RJnEflRQO2/j8wcxQ=="
+  "resolved" "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.3.2.tgz"
+  "version" "4.3.2"
+  dependencies:
+    "@types/react-test-renderer" "^18.0.0"
+
 "@react-native-windows/cli@0.70.0":
   "integrity" "sha512-syQUl+9K0TM3motbev7jIOmsYvyZ1DiDQ0155oHPo539/n8z44/T4h5NSMBQ3mFQTmCrfWNatOvDGNJ/rjJzwQ=="
   "resolved" "https://registry.npmjs.org/@react-native-windows/cli/-/cli-0.70.0.tgz"
@@ -1967,6 +1974,13 @@
   "integrity" "sha512-z5tKfblHLG6jts2AQcioDw4N+F2EzflO9n495yNyqyMYRkSIVTLX64MHBeqMp5wfOY5mshy0GsOgnFSXrXKQSg=="
   "resolved" "https://registry.npmjs.org/@types/react-native/-/react-native-0.70.4.tgz"
   "version" "0.70.4"
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-test-renderer@^18.0.0":
+  "integrity" "sha512-C7/5FBJ3g3sqUahguGi03O79b8afNeSD6T8/GU50oQrJCU0bVCCGQHaGKUbg2Ce8VQEEqTw8/HiS6lXHHdgkdQ=="
+  "resolved" "https://registry.npmjs.org/@types/react-test-renderer/-/react-test-renderer-18.0.0.tgz"
+  "version" "18.0.0"
   dependencies:
     "@types/react" "*"
 

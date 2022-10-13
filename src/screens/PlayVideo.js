@@ -5,6 +5,7 @@ import VideoPlayer from 'react-native-video-controls';
 import Orientation from 'react-native-orientation-locker';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {Icon} from '@rneui/themed';
+import Slider from '@react-native-community/slider';
 var videos = [
   {
     url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4',
@@ -67,7 +68,7 @@ const PlayVideo = props => {
   const [videoIndexNum, setVideoIndexNum] = useState(0);
 
   const toggleController = () => {
-    setCounter(3);
+    setCounter(5);
     setshowController(!showController);
   };
 
@@ -231,7 +232,41 @@ const PlayVideo = props => {
       </View>
 
       {/* Bottom View */}
-      <View style={{height: '20%', justifyContent: 'flex-end'}}>
+      <View
+        style={{
+          width: '95%',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          alignSelf: 'center',
+        }}>
+        <Text
+          style={{
+            color: '#fff',
+          }}>
+          {ValidTime(CurrentTime)}
+        </Text>
+
+        <Slider
+          style={{height: 50, flex: 1}}
+          minimumValue={0}
+          maximumValue={Duration}
+          minimumTrackTintColor="#1505f7"
+          maximumTrackTintColor="#1505f7"
+          onSlidingComplete={e => {
+            setCounter(5);
+            setsakeValue(e);
+          }}
+          value={CurrentTime}
+        />
+        <Text
+          style={{
+            color: '#fff',
+          }}>
+          {ValidTime(Duration)}
+        </Text>
+      </View>
+      {/* <View style={{height: '20%', justifyContent: 'flex-end'}}>
         <Text
           style={{
             color: '#fff',
@@ -254,7 +289,7 @@ const PlayVideo = props => {
             />
           ) : null}
         </View>
-      </View>
+      </View> */}
     </View>
   );
 
@@ -302,7 +337,9 @@ const PlayVideo = props => {
           onEnd={() => {
             videos.length > videoIndexNum + 1
               ? setVideoIndexNum(videoIndexNum + 1)
-              : (Orientation.lockToPortrait(), setFullScreen(false));
+              : (Orientation.lockToPortrait(),
+                setFullScreen(false),
+                setpaused(true));
           }}
           onSeek={e => {
             setCurrentTime(e.currentTime);
