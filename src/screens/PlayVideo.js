@@ -1,4 +1,10 @@
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-controls';
@@ -58,6 +64,7 @@ const PlayVideo = props => {
   }, [counter]);
 
   const [showController, setshowController] = useState(true);
+  const [showLoader, setshowLoader] = useState(false);
 
   const [paused, setpaused] = useState(true);
   const [muted, setmuted] = useState(false);
@@ -66,6 +73,7 @@ const PlayVideo = props => {
   const [Duration, setDuration] = useState(0);
   const [sakeValue, setsakeValue] = useState(0);
   const [videoIndexNum, setVideoIndexNum] = useState(0);
+  let ScalValue = fullScreen ? 1 : 0.7;
 
   const toggleController = () => {
     setCounter(5);
@@ -117,54 +125,47 @@ const PlayVideo = props => {
   const Controller = (
     <View
       style={{
-        //   backgroundColor: 'white',
         position: 'absolute',
         zIndex: 9999,
         height: '100%',
         width: '100%',
         justifyContent: 'space-between',
-        paddingTop: 10,
       }}>
       {/* Top View */}
-      <View
+      <TouchableOpacity
         style={{
           alignSelf: 'center',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '95%',
-        }}>
+          height: 70,
+        }}
+        activeOpacity={1}>
         <Icon
           name="arrow-back-outline"
           type="ionicon"
-          size={30}
+          size={40 * ScalValue}
           onPress={() => navigation.goBack()}
           color={'#fff'}
           activeOpacity={1}
         />
-        <Icon
-          name="expand"
-          type="ionicon"
-          size={30}
-          onPress={() => FullScreen()}
-          color={'#fff'}
-          activeOpacity={1}
-        />
-      </View>
+      </TouchableOpacity>
 
       {/* Center View */}
-      <View
+      <TouchableOpacity
         style={{
           alignSelf: 'center',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '80%',
-        }}>
+        }}
+        activeOpacity={1}>
         <Icon
           name="play-skip-back-outline"
           type="ionicon"
-          size={40}
+          size={40 * ScalValue}
           color={'#fff'}
           onPress={() =>
             videos.length > 0 && videoIndexNum > 0
@@ -176,7 +177,7 @@ const PlayVideo = props => {
         <Icon
           name="play-back-outline"
           type="ionicon"
-          size={40}
+          size={40 * ScalValue}
           color={'#fff'}
           onPress={() => setsakeValue(CurrentTime - 5)}
           activeOpacity={1}
@@ -191,7 +192,7 @@ const PlayVideo = props => {
             <Icon
               name="play-outline"
               type="ionicon"
-              size={40}
+              size={40 * ScalValue}
               onPress={() => setpaused(false)}
               color={'#fff'}
               activeOpacity={1}
@@ -201,7 +202,7 @@ const PlayVideo = props => {
             <Icon
               name="pause-outline"
               type="ionicon"
-              size={40}
+              size={40 * ScalValue}
               color={'#fff'}
               onPress={() => setpaused(true)}
               activeOpacity={1}
@@ -212,7 +213,7 @@ const PlayVideo = props => {
         <Icon
           name="play-forward-outline"
           type="ionicon"
-          size={40}
+          size={40 * ScalValue}
           color={'#fff'}
           onPress={() => setsakeValue(CurrentTime + 5)}
           activeOpacity={1}
@@ -220,7 +221,7 @@ const PlayVideo = props => {
         <Icon
           name="play-skip-forward-outline"
           type="ionicon"
-          size={40}
+          size={40 * ScalValue}
           color={'#fff'}
           onPress={() =>
             videos.length > videoIndexNum + 1
@@ -229,17 +230,19 @@ const PlayVideo = props => {
           }
           activeOpacity={1}
         />
-      </View>
+      </TouchableOpacity>
 
       {/* Bottom View */}
-      <View
+      <TouchableOpacity
         style={{
           width: '95%',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           alignSelf: 'center',
-        }}>
+          height: 70,
+        }}
+        activeOpacity={1}>
         <Text
           style={{
             color: '#fff',
@@ -265,31 +268,61 @@ const PlayVideo = props => {
           }}>
           {ValidTime(Duration)}
         </Text>
-      </View>
-      {/* <View style={{height: '20%', justifyContent: 'flex-end'}}>
-        <Text
-          style={{
-            color: '#fff',
-          }}>
-          {ValidTime(CurrentTime)}/{ValidTime(Duration)}
-        </Text>
         <View
           style={{
-            height: 8,
-            width: '100%',
-            backgroundColor: 'grey',
+            width: `${15 / ScalValue}%`,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-around',
           }}>
-          {Duration > 0 ? (
-            <View
-              style={{
-                height: '100%',
-                width: `${(CurrentTime / Duration) * 100}%`,
-                backgroundColor: 'green',
-              }}
+          {muted ? (
+            <Icon
+              type="ionicon"
+              name="volume-mute-outline"
+              size={35 * ScalValue}
+              color={'#fff'}
+              onPress={() => setmuted(false)}
             />
-          ) : null}
+          ) : (
+            <Icon
+              type="ionicon"
+              name="volume-high-outline"
+              size={35 * ScalValue}
+              color={'#fff'}
+              onPress={() => setmuted(true)}
+            />
+          )}
+          <Icon
+            name="expand"
+            type="ionicon"
+            size={40 * ScalValue}
+            onPress={() => FullScreen()}
+            color={'#fff'}
+            activeOpacity={1}
+          />
         </View>
-      </View> */}
+      </TouchableOpacity>
+    </View>
+  );
+
+  const Loader = (
+    <View
+      style={{
+        position: 'absolute',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        width: '100%',
+      }}>
+      <ActivityIndicator
+        size={40 * ScalValue}
+        color={'white'}
+        style={{
+          backgroundColor: 'rgba(52, 52, 52, 0.8)',
+          padding: 10,
+          borderRadius: 100,
+        }}
+      />
     </View>
   );
 
@@ -326,6 +359,10 @@ const PlayVideo = props => {
             height: '100%',
             width: '100%',
           }}
+          selectedVideoTrack={{
+            type: 'resolution',
+            value: 240,
+          }}
           posterResizeMode="cover"
           resizeMode="contain"
           paused={paused}
@@ -333,7 +370,6 @@ const PlayVideo = props => {
           volume={volume}
           fullscreen={fullScreen}
           seek={sakeValue}
-          //   onEnd={() => navigation.goBack()}
           onEnd={() => {
             videos.length > videoIndexNum + 1
               ? setVideoIndexNum(videoIndexNum + 1)
@@ -344,15 +380,40 @@ const PlayVideo = props => {
           onSeek={e => {
             setCurrentTime(e.currentTime);
           }}
+          onLoadStart={() => {
+            setshowLoader(true);
+          }}
           onLoad={e => {
+            console.log('load', e);
             setDuration(e.duration);
+            setshowLoader(false);
+          }}
+          onBuffer={({isBuffering}) => {
+            console.log('Buffring', e);
+            if (isBuffering) {
+              setshowLoader(true);
+            } else {
+              setshowLoader(false);
+            }
+          }}
+          bufferConfig={{
+            minBufferMs: 1500,
+            maxBufferMs: 50,
+            bufferForPlaybackMs: 250,
+            bufferForPlaybackAfterRebufferMs: 500,
           }}
           onProgress={e => {
-            console.log('pro', e);
+            // console.log('pro', e);
             setCurrentTime(e.currentTime);
           }}
         />
-        {showController ? Controller : null}
+        {showController
+          ? showLoader
+            ? Loader
+            : Controller
+          : showLoader
+          ? Loader
+          : null}
       </TouchableOpacity>
       {fullScreen ? null : (
         <>
